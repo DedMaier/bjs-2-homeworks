@@ -50,23 +50,30 @@ function cachingDecoratorNew(func) {
   
   //Задача 3
   
-  function debounceDecorator2(func, ms) {
-	let flag = false;
-	sendMessage.count = 0;
-	let timeout;
+  function debounceDecorator2(func) {
+	let isThrottled = false;
+	  let timeout;
+	  wrapper.count = 0;
   
-	function sendMessage(...rest) {
-	  if (!flag) {
-		clearTimeout(timeout)
-		func(...rest);
-		flag = true;
-		sendMessage.count++;
+	  function wrapper(...rest) {
   
-		timeout = setTimeout(() => {
-		  flag = false;
-		} , ms);
-	  }
-	}
-	
-	return sendMessage;
-  }
+		  clearTimeout(timeout);
+  
+		  timeout = setTimeout(() => {
+			  isThrottled = false;
+			  func.apply(this, rest);
+			  wrapper.count++;
+		  }, ms);
+  
+		  if (isThrottled) {
+			  return;
+		  };
+  
+		  func.apply(this, rest);
+		  wrapper.count++;
+		  isThrottled = true;
+  
+		  console.log(wrapper.count);
+	  };
+	  return wrapper;
+  } 
