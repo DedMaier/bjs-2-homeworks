@@ -2,28 +2,26 @@
 
 function cachingDecoratorNew(func) {
 	let cache = [];
+	
 	function wrapper(...rest) {
-	  let hash = rest.join(',');
-	  let existResult = cache.filter(cacheRecord => cacheRecord.hash === hash);
-	  if (existResult.length === 1) {
-		  console.log('Из кэша: ' + existResult[0].value);
-		  return 'Из кэша: ' + existResult[0].value;
-	  } 
-	  else {
-		let value = func.call(this, ...rest);
-		console.log('Вычисляем: ' + value);
-		if (cache.length < 5) {   
-		  cache.push({hash, value});
-		} 
-		else {
-		  cache.unshift({hash, value});
-		  cache.pop();
-		} 
-		return 'Вычисляем: ' + value;
-	  }
+		const hash = {
+		  hash: rest.join(","),
+		}; 
+		let existResult = cache.findIndex((item)=> item.hash === rest.join(",") ); 
+		if (existResult !== -1 ) { 
+			console.log("Из кэша: " + cache[existResult].value); 
+			return "Из кэша: " + cache[existResult].value;
+		}
+		hash.value = func(...rest)
+		cache.push(hash)
+		if (cache.length > 5) { 
+		  cache.shift()  
+		}
+		console.log("Вычисляем: " + hash.value);
+		return "Вычисляем: " + hash.value;  
 	}
 	return wrapper;
-  }
+	}
   
   
   // Задача 2
@@ -52,11 +50,23 @@ function cachingDecoratorNew(func) {
   
   //Задача 3
   
-  function debounceDecorator2(debounceDecoratorNew) {
-	let count = 0;
-	function wrapper(...rest) {
-	  wrapper.history = count++;
-	  return debounceDecoratorNew.call(this, ...rest);
+  function debounceDecorator2(func, ms) {
+	let flag = false;
+	sendMessage.count = 0;
+	let timeout;
+  
+	function sendMessage(...rest) {
+	  if (!flag) {
+		clearTimeout(timeout)
+		func(...rest);
+		flag = true;
+		sendMessage.count++;
+  
+		timeout = setTimeout(() => {
+		  flag = false;
+		} , ms);
+	  }
 	}
-	return wrapper;
+	
+	return sendMessage;
   }
