@@ -36,12 +36,17 @@ function worker(arr) {
   return sum;
 }
 
-function makeWork(arrOfArr, func) {
+function makeWork(arrOfArr, worker) {
   let max = -Infinity;
 
   // Ваш код
   // for ...
-  for ()
+  for (let i = 0; i < arrOfArr.length; i++){
+    let arrSum = worker(arrOfArr[i]);
+    if (arrSum > max){
+      max = arrSum;
+    }
+  }
 
   return max;
 }
@@ -49,4 +54,5 @@ function makeWork(arrOfArr, func) {
 // Задание 3
 function worker2(arr) {
   // Ваш код
+  return getArrayParams(arr).max - getArrayParams(arr).min;
 }
