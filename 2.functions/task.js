@@ -18,13 +18,12 @@ function getArrayParams(arr) {
       min = arr[i];
     }
   }
-
   avg = parseFloat((sum / arr.length).toFixed(2));
-
   return { min: min, max: max, avg: avg };
 }
 
 // Задание 2
+
 function worker(arr) {
   let sum = 0;
 
@@ -32,7 +31,6 @@ function worker(arr) {
   for (let i = 0; i < arr.length; i++) {
     sum = sum + arr[i];
   }
-
   return sum;
 }
 
@@ -41,17 +39,17 @@ function makeWork(arrOfArr, worker) {
 
   // Ваш код
   // for ...
-  for (let i = 0; i < arrOfArr.length; i++){
+  for (let i = 0; i < arrOfArr.length; i++) {
     let arrSum = worker(arrOfArr[i]);
-    if (arrSum > max){
+    if (arrSum > max) {
       max = arrSum;
     }
   }
-
   return max;
 }
 
 // Задание 3
+
 function worker2(arr) {
   // Ваш код
   return getArrayParams(arr).max - getArrayParams(arr).min;
