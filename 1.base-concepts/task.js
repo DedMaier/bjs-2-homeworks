@@ -18,37 +18,40 @@ function solveEquation(a, b, c) {
   return arr; // array
 }
 
-/* === Задача 2 =====*/ 
+/* === Задача 2 =====*/
 
-function calculateTotalMortgage(percent, contribution, amount, date) {
+function calculateTotalMortgage(percent, contribution, amount, countMonths) {
   let totalAmount;
+  let bodyCredit;
+  let amountCreditMonths;
+  let payment;
 
-  // код для задачи №2 писать здесь
-
-  percent = +percent;
-  contribution = +contribution;
-  amount = +amount;
-  date = +date;
-  if (typeof percent === `string`) {
-    totalAmount = `Параметр "Процентная ставка" содержит неправильное значение ${percent}`;
-  } else if (typeof contribution === `string`) {
-    totalAmount = `Параметр "Начальный взнос" содержит неправильное значение ${contribution}`;
-  } else if (typeof amount === `string`) {
-    totalAmount = `Параметр "Общая стоимость" содержит неправильное значение ${amount}`;
-  } else if (typeof date === `string`) {
-    totalAmount = `Параметр "Сроки ипотеки" содержит неправильное значение ${date}`;
+  if ( Number.isNaN(+percent) ) {
+    totalAmount = `Параметр "Процентная ставка" содержит неправильное значение "${percent}"`;
   }
-  let lianAmount = amount - contribution;
-  let timeNow = new Date();
-  let loanTerm = date - timeNow;
-  loanTerm = loanTerm / 1000 / 60 / 60 / 24 / 30;
-  let monthlyPartPercent = percent / 100 / 12;
-  let monthFee =
-    lianAmount *
-    (monthlyPartPercent +
-      monthlyPartPercent / ((1 + monthlyPartPercent) ** loanTerm - 1));
-  totalAmount = +(monthFee * loanTerm).toFixed(2);
+  else if ( Number.isNaN(+contribution) ) {
+    totalAmount = `Параметр "Начальный взнос" содержит неправильное значение "${contribution}"`;
+  }
+  else if ( Number.isNaN(+amount) ) {
+    totalAmount = `Параметр "Общая стоимость" содержит неправильное значение "${amount}"`;
+  }
+  else {
+    percent = +percent / 12 / 100;
+    contribution = +contribution;
+    amount = +amount;
+
+    bodyCredit = amount - contribution;
+
+    amountCreditMonths = Math.floor( (countMonths.getTime() - Date.now()) / 1000/60/60/24/30 );
+
+    payment = bodyCredit * (percent + (percent / (((1 + percent) ** amountCreditMonths) - 1)));
+
+    totalAmount = +(payment * amountCreditMonths).toFixed(2);
+  };
+  
   console.log(totalAmount);
 
   return totalAmount;
 }
+
+debugger;
